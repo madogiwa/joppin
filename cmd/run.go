@@ -17,6 +17,10 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/madogiwa/joppin/db"
+	"github.com/spf13/viper"
+	"os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 )
@@ -32,7 +36,19 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("run called")
+		fmt.Printf("run called: %v\n", args)
+
+		client := db.NewDynamoDBLockClient(viper.GetString("dynamodb_table"))
+		client.Lock(viper.GetString("lock_key"), viper.GetInt64("lock_timeout"))
+		defer client.Unlock(viper.GetString("lock_key"))
+
+		command := exec.Command(args[0], args[1:]...)
+		command.Stdout = os.Stdout
+		command.Stderr = os.Stderr
+		err := command.Run()
+		if err != nil {
+			fmt.Printf("run failed: %v\n", err)
+		}
 	},
 }
 

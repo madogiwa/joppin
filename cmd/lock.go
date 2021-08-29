@@ -17,6 +17,8 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/madogiwa/joppin/db"
+	"github.com/spf13/viper"
 
 	"github.com/spf13/cobra"
 )
@@ -33,6 +35,9 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("lock called")
+
+		client := db.NewDynamoDBLockClient(viper.GetString("dynamodb_table"))
+		client.Lock(viper.GetString("lock_key"), viper.GetInt64("lock_timeout"))
 	},
 }
 
@@ -43,7 +48,7 @@ func init() {
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// lockCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// lockCmd.PersistentFlags().String("table", "t", "DynamoDB Table Name")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:

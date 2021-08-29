@@ -17,6 +17,8 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/madogiwa/joppin/db"
+	"github.com/spf13/viper"
 
 	"github.com/spf13/cobra"
 )
@@ -33,6 +35,8 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("unlock called")
+		client := db.NewDynamoDBLockClient(viper.GetString("dynamodb_table"))
+		client.Unlock(viper.GetString("lock_key"))
 	},
 }
 
