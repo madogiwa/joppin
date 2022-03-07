@@ -39,7 +39,7 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("run called: %v\n", args)
 
-		client := db.NewDynamoDBLockClient(viper.GetString("dynamodb_table"))
+		client := db.NewDynamoDBLockClient(viper.GetString("dynamodb_table"), viper.GetString("dynamodb_endpoint"))
 		client.Lock(viper.GetString("lock_key"), viper.GetInt64("lock_timeout"))
 		defer client.Unlock(viper.GetString("lock_key"))
 

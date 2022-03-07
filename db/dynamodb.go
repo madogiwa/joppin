@@ -40,11 +40,16 @@ type LockItem struct {
 	Ttl    int64
 }
 
-func NewDynamoDBLockClient(tableName string) *DynamoDBLockClient {
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
+func NewDynamoDBLockClient(tableName string, endpoint string) *DynamoDBLockClient {
+	options := session.Options{
 		SharedConfigState: session.SharedConfigEnable,
-	}))
+	}
+	if endpoint != "" {
+		log.Println("Override DynamoDB Endpoint with " + endpoint)
+		options.Config.Endpoint = aws.String(endpoint)
+	}
 
+	sess := session.Must(session.NewSessionWithOptions(options))
 	svc := dynamodb.New(sess)
 
 	return &DynamoDBLockClient{
