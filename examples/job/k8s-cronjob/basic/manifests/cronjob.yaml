@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: joppin-examples-k8s-cronjob-basic
+spec:
+  schedule: "* * * * *"
+  startingDeadlineSeconds: 30
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: basic
+            image: madogiwa/joppin-examples-k8s-cronjob-basic
+            env:
+            - name: AWS_DEFAULT_REGION
+              value: "us-east-1"
+            - name: AWS_ACCESS_KEY_ID
+              value: "AKIAIOSFODNN7EXAMPLE"
+              #
+              # DO NOT Write your actual secret key here
+              # You should use IRSA or Secret via secretKeyRef
+              #
+            - name: AWS_SECRET_ACCESS_KEY
+              value: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+            - name: JOPPIN_DYNAMODB_ENDPOINT
+              value: "http://dynamodb-local:8000"
+            - name: JOPPIN_DYNAMODB_LOCK_TABLE
+              value: "JoppinLockTable"
+            - name: JOPPIN_LOCK_KEY
+              value: "joppin-basic"
+            command:
+            - /bin/bash
+            - -c
+            - |
+              echo "Sleeps for a random amount of time between 45 and 90 seconds."
+
+              seconds=$(($RANDOM % 45 + 45))
+              echo "Sleep ${seconds} sec..."
+
+              joppin run -- sleep ${seconds}
+              rc=$?
+
+              echo "Finished with ${rc}"
+              exit ${rc}

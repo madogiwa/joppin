@@ -1,0 +1,14 @@
+apiVersion: skaffold/v2beta27
+kind: Config
+metadata:
+  name: joppin-examples-k8s-cronjob
+build:
+  artifacts:
+  - image: madogiwa/joppin-examples-k8s-cronjob-basic
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - manifests/cronjob.yaml
+    - manifests/dynamodb-local.yaml
