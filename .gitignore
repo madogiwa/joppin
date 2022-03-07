@@ -17,3 +17,6 @@
 # vendor/
 
 
+# Output of goreleaser
+dist/
+
