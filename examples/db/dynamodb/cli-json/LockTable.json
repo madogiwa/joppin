@@ -1,0 +1,19 @@
+{
+  "TableName": "JoppinLockTable",
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "LockID",
+      "AttributeType": "S"
+    }
+  ],
+  "KeySchema": [
+    {
+      "AttributeName": "LockID",
+      "KeyType": "HASH"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}
