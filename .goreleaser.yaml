@@ -14,8 +14,6 @@ builds:
       - windows
       - darwin
 archives:
-  - replacements:
-      386: i386
   - id: binary
     format: binary
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
