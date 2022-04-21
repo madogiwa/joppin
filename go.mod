@@ -3,7 +3,7 @@ module github.com/madogiwa/joppin
 go 1.18
 
 require (
-	github.com/aws/aws-sdk-go v1.40.27
+	github.com/aws/aws-sdk-go v1.43.43
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.11.0
 )
